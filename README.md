@@ -4,10 +4,6 @@ Pour ce projet, vous avez la tâche de réaliser l'intégration d'un blog en res
 
 Ce blog est responsive, pensez donc bien à commencer en mobile first pour éviter tous désagréments d'intégrations par la suite.
 
-## Durée
-
-2 jours
-
 ## Previews
 
 Les images étant trop grandes pour être affichées sur GitHub, nous avons donc choisi de les stocker dans le dossier `Previews` du projet.
