@@ -18,19 +18,50 @@ article img {
     height: 200px;
     object-fit: cover;  /*enlève le zoom à cause du height*/
 }
+.article {
+    text-align: justify;
+}
+.read-article-img {
+    height: 300%;
+    width: 100% !important;
+    object-fit: cover;
+}
 .carousel-img {
-    height: 400px;
-    object-fit: cover;  /**/
+    height: 200px;
+    object-fit: cover;  
 }
 /*Couleur dégrader de droite à gauche couper en 3*/
 .gradient {
     background: linear-gradient(to right, var(--yellow) 0%, var(--orange) 33%, var(--pink) 66%, var(--violet) 100%);
     height: 4px;
+    animation: rbAnimation 18s infinite; /*indique le nombre de cycle utilisés pour répéter une animation avant que celle-ci s'arrête.*/
+}
+.comment_form_input input,
+.comment_form_input textarea {
+    outline: none;
+}
+@keyframes rbgAnimation {
+    0% {
+        filter: hue-rotate(0deg);
+    }
+    33% {
+        filter: hue-rotate(33deg);
+    }
+    66% {
+        filter: hue-rotate(66deg);
+    }
+    100% {
+        filter: hue-rotate(0deg);
+    }
 }
 /*media*/
 @media screen and (min-width: 992px) {
     .carousel-img {
         height: 400px;
+    }
+    .read-article-img {
+        height: 500px;
+        width: 75%;
     }
 }
     
