@@ -1,3 +1,34 @@
+<?php 
+
+//connexion à la base de données
+require_once 'connexion.php';
+
+
+//Chargement des dépendances
+require_once 'vendor/autoload.php';
+
+//Netoyage de la valeur reçue
+$idpost = htmlspecialchars(strip_tags( $_GET['id']));
+/**
+ * On "prepare" une requête SQL dès qu'une info externe est transmise à celle-ci
+ */
+$requette = $db->prepare('SELECT posts.idpost, posts.title, posts.content, posts.category_id, posts.cover, posts.created_at, category.name , users.fistname, users.lastname FROM posts INNER JOIN category ON category.idcat = posts.category_id INNER JOIN users ON users.iduser = posts.user_id WHERE posts.idpost = :idpost ORDER BY posts.created_at DESC');
+$requette ->bindValue(':idpost', $idpost, PDO::PARAM_INT);
+$requette->execute();
+//Récupération d'un seul enregistrement
+$article = $requette ->fetch();
+
+//Affiche le BDD pour visualiser
+//dump($article);
+
+//Si article est égal à false...
+if (!$article) { 
+    //...redirection vers une page 404
+    header('Location: 404.php');
+}
+
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,7 +39,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <!-- JavaScript Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
-    <title>Article</title>
+    <title>Philosophy..<?php echo $article['title'];?> </title>
 </head>
 <body>
     <header class="bg-dark">
@@ -16,7 +47,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-6 col-lg-12 text-start text-lg-center">
-                    <a href="#" title="Philosophy" class="text-white text-decoration-none h1">Philosophy.                       
+                    <a href="index.php" title="Philosophy" class="text-white text-decoration-none h1">Philosophy.                       
                     </a>
                 </div>  <!--Menu Burger-->
                 <div class="col-6 d-block d-lg-none text-end">                    
@@ -40,26 +71,36 @@
         </header>    
                     <!--dégrader-->
      <div class="gradient"></div>
+
     <main class="pt-5">
         <div class="container">
             <article>
-                <h1 class="h1 text-start text-lg-center">This Is A Standard Format Post.</h1>
+                <h1 class="h1 text-start text-lg-center"><?php echo $article['title'];?></h1>
                 <div class="row pt-lg-2 justify-content-center">
                     <div class="col-12 col-lg-6 text-start text-lg-end">
-                        <p class="text-secondary">December 12, 2021</p>
+                        <p class="text-secondary">
+                        <?php
+                                       $timestamp = strtotime($article['created_at']);
+                                       echo date('d F Y', $timestamp); 
+                                       ?>
+                        </p>
                     </div>
                     <div class="col-12 col-lg-6">
                         <div class="d-flex align-items-center gap-2">
-                            <a href="#" title="Design" class="badge rounded-pill bg-primary text-decoration-none">Design</a>
-                            <a href="#" title="Photography" class="badge rounded-pill bg-primary text-decoration-none">Photography</a>
+
+                            <a href="categories.php?id=<?php echo $article['category_id'];?>" title="<?php echo $article['name'];?>" class="badge rounded-pill bg-primary text-decoration-none"><?php echo $article['name']?></a>
+                            <div class="col-12 col-lg-4 text-lg-start">
+                             <?php echo "{$article['fistname']} {$article['lastname']}";?></p>
+                            </div>
                         </div>
                     </div>
                     <div class="col-12 py-5 text-center">
-                        <img src="images/01.jpg" alt="Image de l'article" class="rounded read-article-img">
+                        <img src="images/upload/<?php echo $article['cover'];?>" alt="<?php echo $article['title'];?>" class="rounded read-article-img">
                     </div>
                     <div class="col-12 col-lg-6 article">
-                        <p class="fw-bold">Duis ex ad cupidatat tempor Excepteur cillum cupidatat fugiat nostrud cupidatat dolor sunt sint sit nisi est eu exercitation incididunt adipisicing veniam velit id fugiat enim mollit amet anim veniam dolor dolor irure velit commodo cillum sit nulla ullamco magna amet magna cupidatat qui labore cillum sit in tempor veniam consequat non laborum adipisicing aliqua ea nisi sint. </p>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean odio risus, iaculis sollicitudin nisi vitae, fringilla iaculis est. Pellentesque in enim quam. Quisque commodo mauris tristique laoreet varius. Curabitur ut malesuada ligula, eget mattis lectus. Praesent urna est, pulvinar vel sagittis sed, cursus eu ipsum. Aenean pulvinar leo sit amet dignissim tempor. Vestibulum at vehicula urna, ut gravida nisl. Curabitur non ornare libero. Nam sit amet dolor magna. Donec molestie arcu quis vestibulum cursus. Nam in condimentum dolor. Suspendisse gravida dolor vitae pharetra consectetur. In eget ante sit amet est luctus blandit dapibus sed lacus. Etiam metus purus, mattis eu est auctor, tristique imperdiet erat. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Duis accumsan ligula a enim lacinia sodales. Phasellus feugiat quam a pellentesque maximus. Morbi vitae vestibulum lorem, in ultricies neque. Pellentesque ut blandit urna, faucibus maximus odio. Nullam id purus finibus, gravida nibh sit amet, placerat lectus. Sed libero turpis, suscipit vitae orci a, rutrum congue eros. Nam tempus eros quis ex lobortis elementum. Donec tristique ipsum nec tempus ultrices. Duis semper tempus urna nec viverra. Phasellus dui elit, commodo sit amet libero in, blandit convallis orci. Sed fermentum vehicula congue. Donec a magna leo. Interdum et malesuada fames ac ante ipsum primis in faucibus. Fusce nisl est, tempor sed leo vel, tincidunt ultricies urna. Nulla lacinia vulputate diam in convallis. Sed eu enim nec quam blandit commodo. Sed hendrerit ipsum sit amet tempor convallis. Curabitur facilisis tellus vel tempus pulvinar. Phasellus non orci nunc. Aliquam sit amet dignissim nulla. Interdum et malesuada fames ac ante ipsum primis in faucibus. Proin vitae viverra ex. In nec erat vitae sapien lacinia consequat ut in magna. Nam maximus ultricies nisl, et varius lorem cursus vitae. In quis lorem eget arcu pretium pellentesque eu a purus. Vivamus ac enim vel metus malesuada volutpat ut hendrerit leo. Nunc et tortor varius, suscipit nulla at, rutrum nibh Curabitur nec justo id justo tincidunt bibendum. Quisque congue ultricies risus in finibus. Proin dictum libero vitae rutrum sodales. Aliquam erat justo, vehicula ut nulla et, pellentesque finibus sapien. Nulla facilisi. Vestibulum non luctus nunc. Nam bibendum condimentum est sit amet eleifend. Cras dignissim pulvinar aliquam. In id placerat tellus. Duis in enim fermentum, pharetra felis non, volutpat est. Proin vulputate nulla elit, ut viverra nisl lacinia vitae. Vestibulum a semper nunc. Donec eros magna, viverra vel risus sit amet, rhoncus faucibus nulla. Vestibulum id nisl nisi. Curabitur efficitur volutpat hendrerit. Vestibulum blandit, tellus a pharetra porttitor, massa justo viverra libero, sit amet maximus quam sapien sit amet orci. </p>    
+                        <p class="fw-bold">
+                             <?php echo $article['content'];?>
+                     </p>    
                     </div>
                 </div>
             </article>
@@ -67,7 +108,7 @@
         <div class="container-fluid bg-light mt-5">
             <div class="row justify-content-center">
                 <div class="col-12 col-lg-6 py-5">
-                    <h2 class="h3">Comments</h2>
+                    <h2 class="h3">Content</h2>
                     <div class="row pt-4">
                         <div class="col-6">
                             <p class="m-0 fs-5 fw-bold">John Doe</p>
