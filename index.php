@@ -21,8 +21,8 @@ $articles = $query->fetchAll();
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/mobilestyle.css">
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="../css/mobilestyle.css">
+    <link rel="stylesheet" href="../css/style.css">
     <!-- CSS only -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <!-- JavaScript Bundle with Popper -->
@@ -52,16 +52,16 @@ $articles = $query->fetchAll();
                           <nav> 
                             <ul class="d-flex align-items-center justify-content-center gap-5 py-3">
                                 <li class="nav-item">
-                                <a href="#" title="Home" class="text-secondary text-decoration-none">Home</a>
+                                <a href="index.php" title="Home" class="text-secondary text-decoration-none">Home</a>
                                 </li>
                                 <li class="nav-item">
-                                <a  href="#" title="Categories" class="text-secondary text-decoration-none">Categories</a>
+                                <a  href="categories.php" title="Categories" class="text-secondary text-decoration-none">Categories</a>
                                 </li>
                                 <li class="nav-item">
                                     <a href="#" title="Style" class="text-secondary text-decoration-none">Style</a>
                                 </li>
                                 <li class="nav-item">
-                                <a href="#" title="About" class="text-secondary text-decoration-none">About</a>
+                                <a href="admin/index.php" title="Admin" class="text-secondary text-decoration-none">Admin</a>
                                 </li>
                                 <li class="nav-item">
                                 <a href="#" title="Contact" class="text-secondary text-decoration-none">Contact</a>
