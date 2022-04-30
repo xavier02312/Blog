@@ -51,10 +51,4 @@ function uploadPicture(array $picture, string $path, int $maxSize = 1) : array {
     }
 
 }
-
-
-
-
-
-
 ?>

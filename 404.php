@@ -7,8 +7,12 @@
     <title>Erreur 404</title>
 </head>
 <body>
-            <!---On peux mêtre ce que l'on veux--->
-            <h1>Désoler j'ai tous vendu</h1>
+    <div class="container">
+            <div class="error404">
+                <img src="images/404.png" alt="M. Burns">
+                <p>Mwa Ha Ha Ha Ha Ha Ha Ha!</p>
+            <a href="index.php">Retournes à l'accueil, vite !</a>
+            </div>
 </body>
 </html>
 

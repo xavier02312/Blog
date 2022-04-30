@@ -40,6 +40,27 @@ article img {
 .comment_form_input textarea {
     outline: none;
 }
+.error404 {
+    background-color: var(--yellow-dark);
+    height: 100vh;
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+}
+
+.error404 p {
+    font-size: 2rem;
+    color: var(--white);
+}
+
+.error404 A {
+    color: var(--white);
+    text-decoration: none;
+}
+
+
 @keyframes rbgAnimation {
     0% {
         filter: hue-rotate(0deg);

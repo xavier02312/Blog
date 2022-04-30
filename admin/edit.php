@@ -26,7 +26,7 @@ $query->execute();
 
 $article = $query->fetch();
 
-//dump($article);
+
 /**
  * Déclaration des variable à null
  * Elle serviront à remplir le formulaire des données soumise
@@ -35,10 +35,70 @@ $article = $query->fetch();
 $title = $article['title'];
 $content = $article['content'];
 $category = $article['category_id'];
+$picture = $article['cover'];
 $error = null;
+$success = false;
+
+/*En faisant le php direct sur le formulaire sa évite de refaire le formulaire sur le site 
+ */
+
+if (!empty($_POST)) {
+   
+    //Netoyage des données
+    $title = htmlspecialchars(strip_tags($_POST['title']));
+    $content = htmlspecialchars(strip_tags($_POST['content']));
+    $category = htmlspecialchars(strip_tags($_POST['category']));
 
 
+   //Vérifie que mes champs soient bien remplis
+   if (!empty($title) && !empty($content) && !empty($category)) {
+
+
+    //Est-ce que je reçois une image ?
+    if (!empty($_FILES['cover']) && $_FILES['cover']['error'] === 0) {
+
+        //Supression de l'ancienne image et upload de la nouvelle image
+        unlink("../images/upload/{$picture}");
+
+        //Upload de la nouvelle image
+        require_once 'inc/functions.php';
+        $upload = uploadPicture($_FILES['cover'],'../images/upload', 1);
+
+        //dump($upload);
+
+
+        //Si je reçois une erreur lors de l'upload, je retourne l'erreur à ma variable "$error" afin de 
+        //à ma variable "$error" afin de l'afficher au dessus du formulaire
+        if (!empty($upload['error'])) {
+            $error = $upload['error'];
+
+        }
+        else { 
+            $picture =$upload['filename'];
+        }
+         
+    }
+            //Mise à jour des données en table "posts" seulement si la variable $error = NULL
+            if ($error === null) {
+                
+                $query = $db->prepare('UPDATE posts SET title = :title, content = :content, cover = :cover, category_id = :category WHERE idpost = :idpost');
+                $query->bindValue(':title', $title);
+                $query->bindValue(':content', $content);
+                $query->bindValue(':cover', $picture);
+                $query->bindValue(':category', $category);
+                $query->bindValue(':idpost', $id, PDO::PARAM_INT);
+                $query->execute();
+       }
+       
     
+
+   }
+   else { 
+       $error = 'Le titre, le contenu et la catégorie sont obligatoires';
+   }
+    
+
+}
 
 
 ?>
@@ -48,13 +108,12 @@ $error = null;
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../css/mobilestyle.css">
-    <link rel="stylesheet" href="../css/style.css">
     <!-- CSS only -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <!-- JavaScript Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
-
+    <!-- CSS only -->
+    <link rel="stylesheet" href="../css/style.css">
     <title>Philosophy. -Administration (Edition d'un article)</title>
 </head>
 <body>
@@ -79,7 +138,7 @@ $error = null;
                       <nav> 
                         <ul class="d-flex align-items-center justify-content-center gap-5 py-3">
                             <li class="nav-item">
-                            <a href="../index.php" title="Blog" class="text-secondary text-decoration-none">Blog</a>
+                            <a href="../index.php" title="Go Blog" class="text-secondary text-decoration-none">Aller sur le Blog</a>
                             </li>
                             <li class="nav-item">
                             <a  href="index.php" title="Home" class="text-secondary text-decoration-none">Articles</a>
@@ -96,12 +155,19 @@ $error = null;
        <div class="container">        
 
             <form method="post" enctype="multipart/form-data">
+
+                        <!---Affichache d'un message de succès si nécessaire--->
+
+                        <?php if ($success): ?>
+                            <div class="alert alert-success"><?php echo $success;?></div>
+                            <?php endif;?>
+
                                   <!---Affichage d'une erreur--->
-            <?php if ($error !== null): ?>
-                <div class="alert alert-danger">
-                    <?php echo $error; ?>
-                </div>     
-                <?php endif;?> 
+                        <?php if ($error !== null): ?>
+                            <div class="alert alert-danger">
+                                <?php echo $error; ?>
+                            </div>     
+                            <?php endif;?> 
 
                 <div class="mb-3">
                         <label for="title" class="form-label">Titre</label>
@@ -109,40 +175,45 @@ $error = null;
                         
                     </div>
                     <div class="col-6 mb-3">
-                        <label for="exampleFormControlTextarea1" class="form-label">Contenu</label>
-                        <textarea class="form-control" id="content" name="content" rows="10">
-                            <?php echo $content; ?>
-                        </textarea>
+                        <label for="content" class="form-label">Contenu</label>
+                        <textarea class="form-control" id="content" name="content" rows="10"><?php echo $content; ?></textarea>
                 </div>
                 <div class="text-center col-6">
-                    <img src="../Images/upload/<?php echo $article['cover'];?>" class="rounded col-6" alt="image">
+                    <img src="../Images/upload/<?php echo $picture;?>" class="img-fluid rounded" alt="image">
                     </div>
                 <div class="mb-3">
                     <label for="cover" class="form-label">Image de couverture</label>
                     <input class="form-control" type="file" id="cover" name="cover">
                     <div id="coverHelpBock" class="form-text">
                         L'image ne doit pas dépasser les 1Mo
-
                     </div>
                 </div>
                 <div class="mb-3">
-                    <label for="category" class="form-label"> Catégorie</label>
+                    <label for="category" class="form-label">Catégorie</label>
 
-                            <select class="form-select" list="datalistOptions" id="category" name="category" placeholder="Aucun fichier...séléctionné">
-                        
+                            <select class="form-select" list="datalistOptions" id="category" name="category">
+                            <option value="">Choisir une categorie</option>
+
+                            <!---Liste des catégories--->
                             <?php foreach($categories as $categorie): ?>
                                     <option value="<?php echo $categorie['idcat']?>"
                                     <?php echo ($category !== null && $category == $categorie['idcat']) ? 'selected': null; ?>>
                                     <?php echo $categorie['name']?>
                                 </option>
-                            <?php endforeach; ?>                                   
+                            <?php endforeach; ?> 
+
                         </select>
                     </div>
                 <div>
-                    <button class="btn btn-primary" type="submit">Enregistrer l'article</button>
+                    <button class="btn btn-primary" type="submit">Enregistrer les modifications</button>
              </div>   
             </form>
-        </div>
-    </main>
-</body>
+          </div>
+       </main>
+     <footer class="bg-dark py-4">
+            <div class="container">
+                <p class="m-0 text-white">&copy; Copyright Philosophy 2022</p>
+            </div>
+    </footer>
+ </body>
 </html>

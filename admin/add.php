@@ -40,9 +40,9 @@ if (!empty($_POST)) {
      */
     if (!empty($title) && !empty($content) && !empty($category) && !empty($_FILES['cover']) && $_FILES['cover']['error'] === 0) {
 
-            //Upload l'image sur le serveur
+        //Upload l'image sur le serveur
             require_once 'inc/functions.php';
-            $upload = uploadPicture($_FILES['cover'], '../images/upload', 1);
+            $upload = uploadPicture($_FILES['cover'], '../images/upload', 1);        
         //dump($upload);
         //Si la variable $upload ne contient la clé "error", alors on peut effectuer l'insertion en BDD   
         if (empty($upload['error'])) {
@@ -60,7 +60,6 @@ if (!empty($_POST)) {
             //Redirection de la page d'acceil de l'administration "?successAdd=1"
             header('Location: index.php?successAdd=1');
 
-            header('Location: categories.php?');
         }
         else {
             //Sinon, on transfère l'erreur à la variable "$error" pour l'afficher au dessus du formulaire
@@ -89,7 +88,7 @@ if (!empty($_POST)) {
     <!-- JavaScript Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 
-    <title>ADD</title>
+    <title>Philosophy. - Administration (Nouvel article)</title>
 </head>
 <body>
 <header class="bg-dark py-4"> <!--on rajoute avec le site bootstrap du CSS-->
@@ -99,7 +98,7 @@ if (!empty($_POST)) {
                   <!--ligne-->
                   <!--titre du site-->
                     <div class="col-6 col-lg-12 text-start text-lg-center">
-                     <a href="../index.php" title="Philosophy" class="text-white text-decoration-none h1 logo">
+                     <a href="index.php" title="Philosophy" class="text-white text-decoration-none h1 logo">
                         Philosophy.<span class="text-danger fs-4">Administration</span></a>
                     </div>
                       <!--menu burger-->
@@ -126,9 +125,9 @@ if (!empty($_POST)) {
         </header>
         <!--Dégrader-->
         <div class="gradient"></div>
-    <main>                      <!---ne pas oublier "post"--->
+    <main>                      
        <div class="container">        
-
+                                <!---ne pas oublier "post"--->
             <form method="post" enctype="multipart/form-data">
                                   <!---Affichage d'une erreur--->
             <?php if ($error !== null): ?>
@@ -143,7 +142,7 @@ if (!empty($_POST)) {
                         
                     </div>
                     <div class="mb-3">
-                        <label for="exampleFormControlTextarea1" class="form-label">Contenu</label>
+                        <label for="content" class="form-label">Contenu</label>
                         <textarea class="form-control" id="content" name="content" rows="10"><?php echo $content; ?></textarea>
                 </div>
                 <div class="mb-3">
@@ -157,8 +156,9 @@ if (!empty($_POST)) {
                 <div class="mb-3">
                     <label for="category" class="form-label"> Catégorie</label>
 
-                            <select class="form-select" list="datalistOptions" id="category" name="category" placeholder="Aucun fichier...séléctionné">
-                        
+                            <select class="form-select" id="category" name="category">
+                            <option>Choisir une catégorie</option>
+                            <!---Liste des catégories--->
                             <?php foreach($categories as $categorie): ?>
 
                                 <option value="<?php echo $categorie['idcat']?>"
@@ -172,12 +172,15 @@ if (!empty($_POST)) {
                 </div>
                 <div>
                   
-                    <button class="btn btn-primary" type="submit">Enregistrer l'article</button>
+                    <button class="btn btn-success">Enregistrer l'article</button>
              </div>   
             </form>
         </div>
-
-
-        </main>
+    </main>
+    <footer class="bg-dark py-4">
+            <div class="container">
+                <p class="m-0 text-white">&copy; Copyright Philosophy 2022</p>
+            </div>
+        </footer>
 </body>
 </html>
