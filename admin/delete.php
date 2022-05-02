@@ -1,4 +1,8 @@
 <?php
+
+//Vérifier si l'accès est autorisé
+require_once 'checkAdmin.php';
+ 
 /**
  * Suprime un article
  */
@@ -11,7 +15,7 @@
 
  //Supprime l' article via son ID
  $query = $db->prepare('DELETE FROM posts WHERE idpost = :idpost');
- $query->bindValue(':idpost', $idpost, PDO::PARAM_INT);
+ $query->bindValue(':idpost', $id, PDO::PARAM_INT);
  $query->execute();
 
  //Si aucune ligne n'a été affecter par la suppression, on redirige vers une erreur 404

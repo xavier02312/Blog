@@ -1,4 +1,8 @@
 <?php
+//Vérifier si l'accès est autorisé
+require_once 'checkAdmin.php';
+
+
 //connexion à la base de données
 require_once '../connexion.php';
 
@@ -61,7 +65,7 @@ $articles =  $query->fetchAll();
                             <a href="../index.php" title="Go Blog" class="text-secondary text-decoration-none">Aller sur le Blog</a>
                             </li>
                             <li class="nav-item">
-                            <a  href="../article.php" title="Home" class="text-secondary text-decoration-none">Artticles</a>
+                            <a  href="../article.php" title="Home" class="text-secondary text-decoration-none">Articles</a>
                             </li>
                         </ul>
                       </nav>

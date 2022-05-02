@@ -1,4 +1,7 @@
 <?php
+//Vérifier si l'accès est autorisé
+require_once 'checkAdmin.php';
+
 //connexion à la base de données
 require_once '../connexion.php';
 
