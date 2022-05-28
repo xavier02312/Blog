@@ -23,15 +23,6 @@
                         <li class="nav-item">
                             <a href="index.php" title="Home" class="text-secondary text-decoration-none">Home</a>
                         </li>
-                        <li class="nav-item">
-                            <a href="categories.php" title="Categories" class="text-secondary text-decoration-none">Categories</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" title="Style" class="text-secondary text-decoration-none">Style</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" title="About" class="text-secondary text-decoration-none">About</a>
-                        </li>
                         <?php if (isset($_SESSION['user'])) : ?>
                             <!---Déconnection--->
                             <li class="nav-item">

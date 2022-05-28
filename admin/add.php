@@ -118,7 +118,7 @@ if (!empty($_POST)) {
                             <a href="../index.php" title="Go Blog" class="text-secondary text-decoration-none">Aller sur le Blog</a>
                             </li>
                             <li class="nav-item">
-                            <a  href="index.php" title="Home" class="text-secondary text-decoration-none">Articles</a>
+                            <a  href="index.php" title="menu Admin" class="text-secondary text-decoration-none">Menu Admin</a>
                             </li>
                         </ul>
                       </nav>
@@ -182,7 +182,7 @@ if (!empty($_POST)) {
     </main>
     <footer class="bg-dark py-4">
             <div class="container">
-                <p class="m-0 text-white">&copy; Copyright Philosophy 2022</p>
+                <p class="m-0 text-white text-center">&copy; Copyright Philosophy 2022</p>
             </div>
         </footer>
 </body>
